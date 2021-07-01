@@ -19,7 +19,7 @@ def flip(x, dim):
     return x.view(xsize)
 
 
-class SincConv_fast(nn.Module):
+class SincConv(nn.Module):
     """Sinc-based convolution
     Parameters
     ----------
@@ -55,7 +55,7 @@ class SincConv_fast(nn.Module):
         min_band_hz=50
     ):
 
-        super(SincConv_fast, self).__init__()
+        super(SincConv, self).__init__()
 
         if in_channels != 1:
             msg = 'SincConv only support one input channel ' + \
@@ -376,7 +376,7 @@ class SincNet(nn.Module):
 
             if i == 0:
                 self.conv.append(
-                    SincConv_fast(
+                    SincConv(
                         self.cnn_N_filter[0], self.cnn_len_filter[0], self.fs
                     )
                 )
