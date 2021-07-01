@@ -408,6 +408,7 @@ class SincNet(nn.Module):
         self.fs = options['fs']
 
         self.N_cnn_layer = len(options['cnn_N_filter'])
+
         self.conv = nn.ModuleList([])
         self.bn = nn.ModuleList([])
         self.ln = nn.ModuleList([])

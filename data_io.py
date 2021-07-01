@@ -37,8 +37,8 @@ def read_conf(args=None):
 
     # [windowing]
     options.fs = Config.get('windowing', 'fs')
-    options.cw_len = Config.get('windowing', 'cw_len')
-    options.cw_shift = Config.get('windowing', 'cw_shift')
+    options.cw_len_ms = Config.get('windowing', 'cw_len_ms')
+    options.cw_shift_ms = Config.get('windowing', 'cw_shift_ms')
 
     # [cnn]
     options.cnn_N_filter = Config.get('cnn', 'cnn_N_filter')

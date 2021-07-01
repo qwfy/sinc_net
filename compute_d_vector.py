@@ -43,8 +43,8 @@ output_folder = options.output_folder
 
 # [windowing]
 fs = int(options.fs)
-cw_len = int(options.cw_len)
-cw_shift = int(options.cw_shift)
+cw_len_ms = int(options.cw_len_ms)
+cw_shift_ms = int(options.cw_shift_ms)
 
 # [cnn]
 cnn_N_filter = list(map(int, options.cnn_N_filter.split(',')))
@@ -90,8 +90,8 @@ except:
 cost = nn.NLLLoss()
 
 # Converting context and shift in samples
-wlen = int(fs * cw_len / 1000.00)
-wshift = int(fs * cw_shift / 1000.00)
+wlen = int(fs * cw_len_ms / 1000.00)
+wshift = int(fs * cw_shift_ms / 1000.00)
 
 # Batch_dev
 Batch_dev = 128

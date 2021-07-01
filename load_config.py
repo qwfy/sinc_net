@@ -20,8 +20,8 @@ def load(config_file_path):
 
     # [windowing]
     cfg.fs = int(options.fs)
-    cfg.cw_len = int(options.cw_len)
-    cfg.cw_shift = int(options.cw_shift)
+    cfg.cw_len_ms = int(options.cw_len_ms)
+    cfg.cw_shift_ms = int(options.cw_shift_ms)
 
     # [cnn]
     cfg.cnn_N_filter = list(map(int, options.cnn_N_filter.split(',')))
@@ -68,7 +68,7 @@ def make_sinc_net_init_options(config) -> Dict:
     options = config
 
     fs = options.fs
-    cw_len = options.cw_len
+    cw_len_ms = options.cw_len_ms
 
     cnn_N_filter = options.cnn_N_filter
     cnn_len_filter = options.cnn_len_filter
@@ -81,7 +81,7 @@ def make_sinc_net_init_options(config) -> Dict:
     cnn_drop = options.cnn_drop
 
     # converting context and shift in samples
-    wlen = int(fs * cw_len / 1000.00)
+    wlen = int(fs * cw_len_ms / 1000.00)
 
     init_arg = {
         'input_dim': wlen,
