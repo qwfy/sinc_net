@@ -69,16 +69,14 @@ class SincConv_fast(nn.Module):
         super(SincConv_fast, self).__init__()
 
         if in_channels != 1:
-            # msg = (f'SincConv only support one input channel '
-            #       f'(here, in_channels = {in_channels:d}).')
-            msg = "SincConv only support one input channel (here, in_channels = {%i})" % (
-                in_channels)
+            msg = 'SincConv only support one input channel ' + \
+                  f'(here, in_channels = {in_channels})'
             raise ValueError(msg)
 
         self.out_channels = out_channels
         self.kernel_size = kernel_size
 
-        # Forcing the filters to be odd (i.e, perfectly symmetrics)
+        # Forcing the filters to be odd (i.e, perfectly symmetric)
         if kernel_size % 2 == 0:
             self.kernel_size = self.kernel_size + 1
 
@@ -95,7 +93,7 @@ class SincConv_fast(nn.Module):
         self.min_low_hz = min_low_hz
         self.min_band_hz = min_band_hz
 
-        # initialize filterbanks such that they are equally spaced in Mel scale
+        # initialize filter banks such that they are equally spaced in Mel scale
         low_hz = 30
         high_hz = self.sample_rate / 2 - (self.min_low_hz + self.min_band_hz)
 
@@ -183,7 +181,7 @@ class sinc_conv(nn.Module):
     def __init__(self, N_filt, Filt_dim, fs):
         super(sinc_conv, self).__init__()
 
-        # Mel Initialization of the filterbanks
+        # Mel Initialization of the filter banks
         low_freq_mel = 80
         high_freq_mel = (
             2595 * np.log10(1 + (fs / 2) / 700))  # Convert Hz to Mel
