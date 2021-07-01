@@ -40,34 +40,34 @@ def read_conf(args=None):
     options.cw_shift = Config.get('windowing', 'cw_shift')
 
     # [cnn]
-    options.cnn_N_filt = Config.get('cnn', 'cnn_N_filt')
-    options.cnn_len_filt = Config.get('cnn', 'cnn_len_filt')
+    options.cnn_N_filter = Config.get('cnn', 'cnn_N_filter')
+    options.cnn_len_filter = Config.get('cnn', 'cnn_len_filter')
     options.cnn_max_pool_len = Config.get('cnn', 'cnn_max_pool_len')
-    options.cnn_use_laynorm_inp = Config.get('cnn', 'cnn_use_laynorm_inp')
-    options.cnn_use_batchnorm_inp = Config.get('cnn', 'cnn_use_batchnorm_inp')
-    options.cnn_use_laynorm = Config.get('cnn', 'cnn_use_laynorm')
-    options.cnn_use_batchnorm = Config.get('cnn', 'cnn_use_batchnorm')
+    options.cnn_use_layer_norm_inp = Config.get('cnn', 'cnn_use_layer_norm_inp')
+    options.cnn_use_batch_norm_inp = Config.get('cnn', 'cnn_use_batch_norm_inp')
+    options.cnn_use_layer_norm = Config.get('cnn', 'cnn_use_layer_norm')
+    options.cnn_use_batch_norm = Config.get('cnn', 'cnn_use_batch_norm')
     options.cnn_act = Config.get('cnn', 'cnn_act')
     options.cnn_drop = Config.get('cnn', 'cnn_drop')
 
     # [dnn]
     options.fc_lay = Config.get('dnn', 'fc_lay')
     options.fc_drop = Config.get('dnn', 'fc_drop')
-    options.fc_use_laynorm_inp = Config.get('dnn', 'fc_use_laynorm_inp')
-    options.fc_use_batchnorm_inp = Config.get('dnn', 'fc_use_batchnorm_inp')
-    options.fc_use_batchnorm = Config.get('dnn', 'fc_use_batchnorm')
-    options.fc_use_laynorm = Config.get('dnn', 'fc_use_laynorm')
+    options.fc_use_layer_norm_inp = Config.get('dnn', 'fc_use_layer_norm_inp')
+    options.fc_use_batch_norm_inp = Config.get('dnn', 'fc_use_batch_norm_inp')
+    options.fc_use_batch_norm = Config.get('dnn', 'fc_use_batch_norm')
+    options.fc_use_layer_norm = Config.get('dnn', 'fc_use_layer_norm')
     options.fc_act = Config.get('dnn', 'fc_act')
 
     # [class]
     options.class_lay = Config.get('class', 'class_lay')
     options.class_drop = Config.get('class', 'class_drop')
-    options.class_use_laynorm_inp = Config.get('class', 'class_use_laynorm_inp')
-    options.class_use_batchnorm_inp = Config.get(
-        'class', 'class_use_batchnorm_inp'
+    options.class_use_layer_norm_inp = Config.get('class', 'class_use_layer_norm_inp')
+    options.class_use_batch_norm_inp = Config.get(
+        'class', 'class_use_batch_norm_inp'
     )
-    options.class_use_batchnorm = Config.get('class', 'class_use_batchnorm')
-    options.class_use_laynorm = Config.get('class', 'class_use_laynorm')
+    options.class_use_batch_norm = Config.get('class', 'class_use_batch_norm')
+    options.class_use_layer_norm = Config.get('class', 'class_use_layer_norm')
     options.class_act = Config.get('class', 'class_act')
 
     # [optimization]
@@ -147,34 +147,34 @@ def read_conf_inp(cfg_file):
     options.cw_shift = Config.get('windowing', 'cw_shift')
 
     # [cnn]
-    options.cnn_N_filt = Config.get('cnn', 'cnn_N_filt')
-    options.cnn_len_filt = Config.get('cnn', 'cnn_len_filt')
+    options.cnn_N_filter = Config.get('cnn', 'cnn_N_filter')
+    options.cnn_len_filter = Config.get('cnn', 'cnn_len_filter')
     options.cnn_max_pool_len = Config.get('cnn', 'cnn_max_pool_len')
-    options.cnn_use_laynorm_inp = Config.get('cnn', 'cnn_use_laynorm_inp')
-    options.cnn_use_batchnorm_inp = Config.get('cnn', 'cnn_use_batchnorm_inp')
-    options.cnn_use_laynorm = Config.get('cnn', 'cnn_use_laynorm')
-    options.cnn_use_batchnorm = Config.get('cnn', 'cnn_use_batchnorm')
+    options.cnn_use_layer_norm_inp = Config.get('cnn', 'cnn_use_layer_norm_inp')
+    options.cnn_use_batch_norm_inp = Config.get('cnn', 'cnn_use_batch_norm_inp')
+    options.cnn_use_layer_norm = Config.get('cnn', 'cnn_use_layer_norm')
+    options.cnn_use_batch_norm = Config.get('cnn', 'cnn_use_batch_norm')
     options.cnn_act = Config.get('cnn', 'cnn_act')
     options.cnn_drop = Config.get('cnn', 'cnn_drop')
 
     # [dnn]
     options.fc_lay = Config.get('dnn', 'fc_lay')
     options.fc_drop = Config.get('dnn', 'fc_drop')
-    options.fc_use_laynorm_inp = Config.get('dnn', 'fc_use_laynorm_inp')
-    options.fc_use_batchnorm_inp = Config.get('dnn', 'fc_use_batchnorm_inp')
-    options.fc_use_batchnorm = Config.get('dnn', 'fc_use_batchnorm')
-    options.fc_use_laynorm = Config.get('dnn', 'fc_use_laynorm')
+    options.fc_use_layer_norm_inp = Config.get('dnn', 'fc_use_layer_norm_inp')
+    options.fc_use_batch_norm_inp = Config.get('dnn', 'fc_use_batch_norm_inp')
+    options.fc_use_batch_norm = Config.get('dnn', 'fc_use_batch_norm')
+    options.fc_use_layer_norm = Config.get('dnn', 'fc_use_layer_norm')
     options.fc_act = Config.get('dnn', 'fc_act')
 
     # [class]
     options.class_lay = Config.get('class', 'class_lay')
     options.class_drop = Config.get('class', 'class_drop')
-    options.class_use_laynorm_inp = Config.get('class', 'class_use_laynorm_inp')
-    options.class_use_batchnorm_inp = Config.get(
-        'class', 'class_use_batchnorm_inp'
+    options.class_use_layer_norm_inp = Config.get('class', 'class_use_layer_norm_inp')
+    options.class_use_batch_norm_inp = Config.get(
+        'class', 'class_use_batch_norm_inp'
     )
-    options.class_use_batchnorm = Config.get('class', 'class_use_batchnorm')
-    options.class_use_laynorm = Config.get('class', 'class_use_laynorm')
+    options.class_use_batch_norm = Config.get('class', 'class_use_batch_norm')
+    options.class_use_layer_norm = Config.get('class', 'class_use_layer_norm')
     options.class_act = Config.get('class', 'class_act')
 
     # [optimization]

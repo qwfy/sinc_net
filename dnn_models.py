@@ -290,10 +290,10 @@ class MLP(nn.Module):
         self.input_dim = int(options['input_dim'])
         self.fc_lay = options['fc_lay']
         self.fc_drop = options['fc_drop']
-        self.fc_use_batchnorm = options['fc_use_batchnorm']
-        self.fc_use_laynorm = options['fc_use_laynorm']
-        self.fc_use_laynorm_inp = options['fc_use_laynorm_inp']
-        self.fc_use_batchnorm_inp = options['fc_use_batchnorm_inp']
+        self.fc_use_batch_norm = options['fc_use_batch_norm']
+        self.fc_use_layer_norm = options['fc_use_layer_norm']
+        self.fc_use_layer_norm_inp = options['fc_use_layer_norm_inp']
+        self.fc_use_batch_norm_inp = options['fc_use_batch_norm_inp']
         self.fc_act = options['fc_act']
 
         self.wx = nn.ModuleList([])
@@ -303,11 +303,11 @@ class MLP(nn.Module):
         self.drop = nn.ModuleList([])
 
         # input layer normalization
-        if self.fc_use_laynorm_inp:
+        if self.fc_use_layer_norm_inp:
             self.ln0 = LayerNorm(self.input_dim)
 
         # input batch normalization    
-        if self.fc_use_batchnorm_inp:
+        if self.fc_use_batch_norm_inp:
             self.bn0 = nn.BatchNorm1d([self.input_dim], momentum=0.05)
 
         self.N_fc_lay = len(self.fc_lay)
@@ -330,7 +330,7 @@ class MLP(nn.Module):
             self.ln.append(LayerNorm(self.fc_lay[i]))
             self.bn.append(nn.BatchNorm1d(self.fc_lay[i], momentum=0.05))
 
-            if self.fc_use_laynorm[i] or self.fc_use_batchnorm[i]:
+            if self.fc_use_layer_norm[i] or self.fc_use_batch_norm[i]:
                 add_bias = False
 
             # Linear operations
@@ -352,34 +352,34 @@ class MLP(nn.Module):
     def forward(self, x):
 
         # Applying Layer/Batch Norm
-        if bool(self.fc_use_laynorm_inp):
+        if bool(self.fc_use_layer_norm_inp):
             x = self.ln0((x))
 
-        if bool(self.fc_use_batchnorm_inp):
+        if bool(self.fc_use_batch_norm_inp):
             x = self.bn0((x))
 
         for i in range(self.N_fc_lay):
 
             if self.fc_act[i] != 'linear':
 
-                if self.fc_use_laynorm[i]:
+                if self.fc_use_layer_norm[i]:
                     x = self.drop[i](self.act[i](self.ln[i](self.wx[i](x))))
 
-                if self.fc_use_batchnorm[i]:
+                if self.fc_use_batch_norm[i]:
                     x = self.drop[i](self.act[i](self.bn[i](self.wx[i](x))))
 
-                if self.fc_use_batchnorm[i] is False and self.fc_use_laynorm[
+                if self.fc_use_batch_norm[i] is False and self.fc_use_layer_norm[
                     i] is False:
                     x = self.drop[i](self.act[i](self.wx[i](x)))
 
             else:
-                if self.fc_use_laynorm[i]:
+                if self.fc_use_layer_norm[i]:
                     x = self.drop[i](self.ln[i](self.wx[i](x)))
 
-                if self.fc_use_batchnorm[i]:
+                if self.fc_use_batch_norm[i]:
                     x = self.drop[i](self.bn[i](self.wx[i](x)))
 
-                if self.fc_use_batchnorm[i] is False and self.fc_use_laynorm[
+                if self.fc_use_batch_norm[i] is False and self.fc_use_layer_norm[
                     i] is False:
                     x = self.drop[i](self.wx[i](x))
 
@@ -391,41 +391,41 @@ class SincNet(nn.Module):
     def __init__(self, options):
         super(SincNet, self).__init__()
 
-        self.cnn_N_filt = options['cnn_N_filt']
-        self.cnn_len_filt = options['cnn_len_filt']
+        self.cnn_N_filter = options['cnn_N_filter']
+        self.cnn_len_filter = options['cnn_len_filter']
         self.cnn_max_pool_len = options['cnn_max_pool_len']
 
         self.cnn_act = options['cnn_act']
         self.cnn_drop = options['cnn_drop']
 
-        self.cnn_use_laynorm = options['cnn_use_laynorm']
-        self.cnn_use_batchnorm = options['cnn_use_batchnorm']
-        self.cnn_use_laynorm_inp = options['cnn_use_laynorm_inp']
-        self.cnn_use_batchnorm_inp = options['cnn_use_batchnorm_inp']
+        self.cnn_use_layer_norm = options['cnn_use_layer_norm']
+        self.cnn_use_batch_norm = options['cnn_use_batch_norm']
+        self.cnn_use_layer_norm_inp = options['cnn_use_layer_norm_inp']
+        self.cnn_use_batch_norm_inp = options['cnn_use_batch_norm_inp']
 
         self.input_dim = int(options['input_dim'])
 
         self.fs = options['fs']
 
-        self.N_cnn_lay = len(options['cnn_N_filt'])
+        self.N_cnn_layer = len(options['cnn_N_filter'])
         self.conv = nn.ModuleList([])
         self.bn = nn.ModuleList([])
         self.ln = nn.ModuleList([])
         self.act = nn.ModuleList([])
         self.drop = nn.ModuleList([])
 
-        if self.cnn_use_laynorm_inp:
+        if self.cnn_use_layer_norm_inp:
             self.ln0 = LayerNorm(self.input_dim)
 
-        if self.cnn_use_batchnorm_inp:
+        if self.cnn_use_batch_norm_inp:
             self.bn0 = nn.BatchNorm1d([self.input_dim], momentum=0.05)
 
         current_input = self.input_dim
 
-        for i in range(self.N_cnn_lay):
+        for i in range(self.N_cnn_layer):
 
-            N_filt = int(self.cnn_N_filt[i])
-            len_filt = int(self.cnn_len_filt[i])
+            N_filter = int(self.cnn_N_filter[i])
+            len_filter = int(self.cnn_len_filter[i])
 
             # dropout
             self.drop.append(nn.Dropout(p=self.cnn_drop[i]))
@@ -436,8 +436,8 @@ class SincNet(nn.Module):
             # layer norm initialization
             self.ln.append(
                 LayerNorm(
-                    [N_filt, int(
-                        (current_input - self.cnn_len_filt[i] + 1) /
+                    [N_filter, int(
+                        (current_input - self.cnn_len_filter[i] + 1) /
                         self.cnn_max_pool_len[i]
                     )]
                 )
@@ -445,8 +445,8 @@ class SincNet(nn.Module):
 
             self.bn.append(
                 nn.BatchNorm1d(
-                    N_filt, int(
-                        (current_input - self.cnn_len_filt[i] + 1) /
+                    N_filter, int(
+                        (current_input - self.cnn_len_filter[i] + 1) /
                         self.cnn_max_pool_len[i]
                     ), momentum=0.05
                 )
@@ -455,40 +455,40 @@ class SincNet(nn.Module):
             if i == 0:
                 self.conv.append(
                     SincConv_fast(
-                        self.cnn_N_filt[0], self.cnn_len_filt[0], self.fs
+                        self.cnn_N_filter[0], self.cnn_len_filter[0], self.fs
                     )
                 )
 
             else:
                 self.conv.append(
                     nn.Conv1d(
-                        self.cnn_N_filt[i - 1], self.cnn_N_filt[i],
-                        self.cnn_len_filt[i]
+                        self.cnn_N_filter[i - 1], self.cnn_N_filter[i],
+                        self.cnn_len_filter[i]
                     )
                 )
 
             current_input = int(
-                (current_input - self.cnn_len_filt[i] + 1) /
+                (current_input - self.cnn_len_filter[i] + 1) /
                 self.cnn_max_pool_len[i]
             )
 
-        self.out_dim = current_input * N_filt
+        self.out_dim = current_input * N_filter
 
     def forward(self, x):
         batch = x.shape[0]
         seq_len = x.shape[1]
 
-        if bool(self.cnn_use_laynorm_inp):
+        if bool(self.cnn_use_layer_norm_inp):
             x = self.ln0(x)
 
-        if bool(self.cnn_use_batchnorm_inp):
+        if bool(self.cnn_use_batch_norm_inp):
             x = self.bn0(x)
 
         x = x.view(batch, 1, seq_len)
 
-        for i in range(self.N_cnn_lay):
+        for i in range(self.N_cnn_layer):
 
-            if self.cnn_use_laynorm[i]:
+            if self.cnn_use_layer_norm[i]:
                 if i == 0:
                     x = self.drop[i](
                         self.act[i](
@@ -511,7 +511,7 @@ class SincNet(nn.Module):
                         )
                     )
 
-            if self.cnn_use_batchnorm[i]:
+            if self.cnn_use_batch_norm[i]:
                 x = self.drop[i](
                     self.act[i](
                         self.bn[i](
@@ -523,8 +523,8 @@ class SincNet(nn.Module):
                 )
 
             if (
-                self.cnn_use_batchnorm[i] is False
-                and self.cnn_use_laynorm[i] is False
+                self.cnn_use_batch_norm[i] is False
+                and self.cnn_use_layer_norm[i] is False
             ):
                 x = self.drop[i](
                     self.act[i](
