@@ -19,7 +19,7 @@ def ReadList(list_file):
 def read_conf():
     parser = OptionParser()
     parser.add_option("--cfg")  # Mandatory
-    (options, args) = parser.parse_args()
+    (options, args) = parser.parse_args([])
     cfg_file = options.cfg
     Config = ConfigParser.ConfigParser()
     Config.read(cfg_file)
@@ -126,7 +126,7 @@ def create_batches_rnd(
 
 def read_conf_inp(cfg_file):
     parser = OptionParser()
-    (options, args) = parser.parse_args()
+    (options, args) = parser.parse_args([])
 
     Config = ConfigParser.ConfigParser()
     Config.read(cfg_file)
