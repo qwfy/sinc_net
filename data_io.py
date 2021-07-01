@@ -16,10 +16,12 @@ def ReadList(list_file):
     return list_sig
 
 
-def read_conf():
+def read_conf(args=None):
     parser = OptionParser()
     parser.add_option("--cfg")  # Mandatory
-    (options, args) = parser.parse_args([])
+    if args is None:
+        args = sys.argv()
+    (options, args) = parser.parse_args(args)
     cfg_file = options.cfg
     Config = ConfigParser.ConfigParser()
     Config.read(cfg_file)
