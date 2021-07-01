@@ -17,7 +17,7 @@ import torch
 import torch.nn as nn
 from torch.autograd import Variable
 
-from data_io import ReadList, read_conf_inp, str_to_bool
+from data_io import ReadList, read_conf, str_to_bool
 from dnn_models import MLP
 from dnn_models import SincNet as CNN
 
@@ -35,7 +35,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # device = None
 
 # Reading cfg file
-options = read_conf_inp(cfg_file)
+options = read_conf(['--cfg', cfg_file])
 
 # [data]
 pt_file = options.pt_file
