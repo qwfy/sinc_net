@@ -1,5 +1,5 @@
 import math
-
+from typing import Dict
 import numpy as np
 import torch
 import torch.nn as nn
@@ -309,26 +309,54 @@ class MLP(nn.Module):
 
 class SincNet(nn.Module):
 
-    def __init__(self, options):
+    def __init__(
+        self,
+        # number of samples, the default is 200ms worth of samples at 16kHz
+        input_dim=3200,
+
+        # sampling frequency
+        fs=16000,
+
+        # number of filters for each layer
+        num_filters=[80, 60, 60],
+
+        # size of filter for each layer
+        filter_sizes=[251, 5, 5],
+
+        # size of the max pooling kernel
+        max_pool_sizes=[3, 3, 3],
+
+        cnn_use_layer_norm_inp=True,
+        cnn_use_batch_norm_inp=False,
+        cnn_use_layer_norm=[True, True, True],
+        cnn_use_batch_norm=[False, False, False],
+
+        cnn_activations=['leaky_relu', 'leaky_relu', 'leaky_relu'],
+        cnn_drops=[0.0, 0.0, 0.0]
+
+    ):
+        """
+        conv -> max pool -> [layer_norm | batch_norm] -> activation -> drop
+        """
         super(SincNet, self).__init__()
 
-        self.cnn_N_filter = options['cnn_N_filter']
-        self.cnn_len_filter = options['cnn_len_filter']
-        self.cnn_max_pool_len = options['cnn_max_pool_len']
+        self.cnn_N_filter = num_filters
+        self.cnn_len_filter = filter_sizes
+        self.cnn_max_pool_len = max_pool_sizes
 
-        self.cnn_act = options['cnn_act']
-        self.cnn_drop = options['cnn_drop']
+        self.cnn_act = cnn_activations
+        self.cnn_drop = cnn_drops
 
-        self.cnn_use_layer_norm = options['cnn_use_layer_norm']
-        self.cnn_use_batch_norm = options['cnn_use_batch_norm']
-        self.cnn_use_layer_norm_inp = options['cnn_use_layer_norm_inp']
-        self.cnn_use_batch_norm_inp = options['cnn_use_batch_norm_inp']
+        self.cnn_use_layer_norm = cnn_use_layer_norm
+        self.cnn_use_batch_norm = cnn_use_batch_norm
+        self.cnn_use_layer_norm_inp = cnn_use_layer_norm_inp
+        self.cnn_use_batch_norm_inp = cnn_use_batch_norm_inp
 
-        self.input_dim = int(options['input_dim'])
+        self.input_dim = input_dim
 
-        self.fs = options['fs']
+        self.fs = fs
 
-        self.N_cnn_layer = len(options['cnn_N_filter'])
+        self.N_cnn_layer = len(num_filters)
 
         self.conv = nn.ModuleList([])
         self.bn = nn.ModuleList([])
@@ -457,3 +485,20 @@ class SincNet(nn.Module):
         x = x.view(batch, -1)
 
         return x
+
+    @classmethod
+    def from_options(cls, options: Dict):
+        instance = cls(
+            input_dim=options['input_dim'],
+            fs=options['fs'],
+            num_filters=options['cnn_N_filter'],
+            filter_sizes=options['cnn_len_filter'],
+            max_pool_sizes=options['cnn_max_pool_len'],
+            cnn_use_layer_norm_inp=options['cnn_use_layer_norm_inp'],
+            cnn_use_batch_norm_inp=options['cnn_use_batch_norm_inp'],
+            cnn_use_layer_norm=options['cnn_use_layer_norm'],
+            cnn_use_batch_norm=options['cnn_use_batch_norm'],
+            cnn_activations=['cnn_act'],
+            cnn_drops=options['cnn_drop']
+        )
+        return instance

@@ -161,7 +161,7 @@ CNN_arch = {
     'cnn_act': cnn_act, 'cnn_drop': cnn_drop,
 }
 
-CNN_net = CNN(CNN_arch)
+CNN_net = CNN.from_options(CNN_arch)
 CNN_net.cuda()
 
 # Loading label dictionary
